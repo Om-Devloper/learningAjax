@@ -1,0 +1,150 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model TenderData
+
+<div class="main-content container row">
+    <h3>@Model.IdData.FirstOrDefault().AgencyName</h3>
+    @{
+        var workDesc = @Model.IdData.FirstOrDefault().WorkDesc;
+        if (workDesc.Length > 50)
+        {
+            workDesc = workDesc.Substring(0, 50);
+        }
+    }
+    <h4 style="color:#5e5e5e">@workDesc</h4>
+</div>
+<div class="TbEffect  container row mb-4">
+
+    <div class="row p-2">
+        <h3 class="col-md-10 text-primary">
+            Tender Notice
+        </h3>
+        <button type="button" class="btn btn-primary col-md-2" data-toggle="modal" data-target="#exampleModal" id="btnModal">
+            Full Details
+        </button>
+    </div>
+
+
+    <div class="row border-top">
+        <span class="col-4 h5 pt-2">
+            TDR
+        </span>
+        <span class="col-8 pt-2">
+            @Model.IdData.FirstOrDefault().OurRefNo
+        </span>
+    </div>
+    <div class="row border-top">
+        <span class="col-4 h5 pt-2">
+            Tender Brief
+        </span>
+        <span class="col-8 pt-2">
+            @Model.IdData.FirstOrDefault().WorkDesc
+        </span>
+    </div>
+    <div class="row border-top">
+        <span class="col-4 h5 pt-2">
+            Address
+        </span>
+        <span class="col-8 pt-2">
+            @Model.IdData.FirstOrDefault().Address
+        </span>
+    </div>
+    <div class="row border-top">
+        <span class="col-4 h5 pt-2">
+            CPV
+        </span>
+        <span class="col-8 pt-2">
+            @Model.IdData.FirstOrDefault().Name
+        </span>
+    </div>
+    <div class="row border-top">
+        <span class="col-4 h5 pt-2">
+            City
+        </span>
+        <span class="col-8 pt-2">
+            @Model.IdData.FirstOrDefault().City
+        </span>
+    </div>
+    <div class="row border-top">
+        <span class="col-4 h5 pt-2">
+            Last Date
+        </span>
+        <span class="col-8 pt-2">
+            @Model.IdData.FirstOrDefault().SubmDate
+        </span>
+    </div>
+    <div class="row border-top">
+        <span class="col-4 h5 pt-2">
+            Competition Type
+        </span>
+        <span class="col-8 pt-2">
+            @Model.IdData.FirstOrDefault().Name
+        </span>
+        <!-- Button trigger modal -->
+
+    </div>
+    </div>
+
+    <!-- Modal -->
+<div class="modal fade show" data-bs-backdrop="static" data-bs-keyboard="false" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content rounded-10">
+                <div class="content-text p-4">
+                    <h3>Registration form</h3>
+                    <form>
+                    <p>All Fields are required
+                        .</p>
+                    <div class="form-group">
+                        <label for="fname">Full Name</label>
+                        <input type="text" class="form-control" id="fname" placeholder="Full Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Email Address</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter email">
+                    </div>
+                    <div class="form-group row mb-4">
+                        <div class="col-12">
+                            <label for="mm">Date of Birth</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="mm" placeholder="MM">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="dd" placeholder="DD">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="yyyy" placeholder="YYYY">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="button" value=" Verify Mail" class="btn btn-primary btn-block">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @*    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-modal="true" style="display: block; padding-left: 17px;">
+    </div>
+    *@
+
+
+
+
+    @section Scripts
+        {
+        <script type="text/javascript">
+
+            $('#btnModal').on('click', function () {
+                alert("hii")
+                $('#modalForm').modal('show')
+            })</script>
+    }

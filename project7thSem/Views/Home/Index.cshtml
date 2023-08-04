@@ -1,0 +1,120 @@
+﻿@model TenderData;
+@{
+    ViewData["Title"] = "Home Page";
+
+    Pager pager = new Pager();
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+<div class="main-content container row">
+    @foreach (pageData item in Model.TotalData)
+    {
+        <div style="background-color:white" class="col-md-12 p-2 m-2 ">
+            <a style="color:#0070b8 " class="h5 p-2" href="@Url.Action("Notice","Home",new{OurRefNo = item.OurRefNo})">@item.AgencyName</a>
+            <h5 class="p-2">
+                @{
+                    if (item.WorkDesc.Length > 100)
+                    {
+                        item.WorkDesc = item.WorkDesc.Substring(0, 100);
+                    }
+                }
+
+                <span style="color:orangered;">@item.OurRefNo </span>
+                <span>@item.WorkDesc</span>
+
+            </h5>
+            <div class="row p-2">
+                <div class="col-md-4">
+                    <span style="color:#0070b8"> Due Date : </span>@item.SubmDate
+                </div>
+                <div class="col-md-5"> <span style="color:#0070b8"> Tender Value : </span>₹ @item.TenderAmount</div>
+                <div class="col-md-3">
+                    @{
+                        var DaysLeft = "";
+                        var currDate = (Convert.ToDateTime(item.SubmDate) - DateTime.Now).Days;
+                        if(currDate<= 0)
+                        {
+                            DaysLeft = "Reffer To Document";
+                        }
+                        else
+                        {
+                            DaysLeft = "Days Left : "+ currDate.ToString().Split(".").FirstOrDefault();
+                        }
+                    }
+                    <span class="text-danger "> @DaysLeft </span>
+                    <form class="p-2">
+                        @*<button type="button" name="OurRefNo" id="btnlink" value="@item.OurRefNo" style="color:#0070b8"> View Notice</button>*@
+                        <a class="btn btn-primary" href="@Url.Action("Notice","Home",new{OurRefNo = item.OurRefNo})">View Notice</a>
+
+                    </form>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    }
+    <div class="row">
+        @if (pager.TotalPages > 0)
+        {
+            <ul class="pagination justify-content-end">
+
+                @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                {
+                    <li class="page-item @(pge == pager.CurrentPage ? "active":"")">
+                        <a class="page-link" asp-asp-controller="Home" asp-action="Index" asp-route-pg="@pge">@pge</a>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>
+@*@section Scripts
+    {
+    <script type="text/javascript">
+
+        //function GetNotice(OurRefNo){   onclick="//GetNotice(item.OurRefNo)"
+        //    $.ajax({
+        //        url: "/Home/Notice",
+        //        type: "GET",
+        //        data: { OurRefNo },
+        //        success: function (result) {
+        //            alert("good")
+        //            window.location.href = "/Home/Notice";
+        //        },
+        //        error: function (xhr, status, error) {
+        //            alert(error);
+        //        }
+        //    })
+        //}
+
+
+        $("#btnlink").on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "/Home",
+                type: "GET",
+                data: { OurRefNo: $(this).attr("value") },
+                success: function (result) {
+                    window.location.href = "/Home/Notice";
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            })
+        });
+
+    </script>
+
+    }*@
+
+
+

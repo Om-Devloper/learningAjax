@@ -1,0 +1,72 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.body {
+    background-color: rgb(251, 239, 223);
+}
+
+.footer {
+    background-color: black;
+    color: white;
+    padding: 5px;
+}
+
+.header {
+    background-color: white;
+    padding: 0 5px;
+}
+
+a.header {
+    color: rgb(0, 0, 0);
+}
+
+.details {
+    padding: 15px;
+    background-color: #ffffff;
+    list-style-type: none;
+}
+
+.topnav {
+    overflow: hidden;
+    padding: 22px;
+}
+
+    .topnav a {
+        padding: 5px 15px;
+        color: black;
+    }
+
+        .topnav a:hover {
+            background-color: rgb(251, 174, 73);
+            color: #ffffff;
+            border-radius: 20px;
+        }
+
+.main-content {
+    margin-top: 150px
+}
+.TbEffect{
+    background-color:white;
+    padding:15px;
+}
+
