@@ -4,18 +4,24 @@
 
     Pager pager = new Pager();
     int pageNo = 0;
+    int i = 0;
 
     if (ViewBag.Pager != null)
     {
         pager = ViewBag.Pager;
         pageNo = pager.CurrentPage;
+        i = (pageNo * 10)-9;
     }
 }
 
 <div class="main-content container row">
     @foreach (pageData item in Model.TotalData)
     {
-        <div style="background-color:white" class="col-md-12 p-2 m-2 ">
+        <div style="background-color:white" class="col-md-12 p-2 m-2 row">
+            <div class="col-md-1">
+                <span>@i</span>
+            </div>
+            <div class="col-md-11">
             <a style="color:#0070b8 " class="h5 p-2" href="@Url.Action("Notice","Home",new{OurRefNo = item.OurRefNo})">@item.AgencyName</a>
             <h5 class="p-2">
                 @{
@@ -57,10 +63,10 @@
 
 
             </div>
-
+            </div>
         </div>
 
-
+        i++;
     }
     <div class="row">
         @if (pager.TotalPages > 0)
@@ -70,7 +76,7 @@
                 @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
                 {
                     <li class="page-item @(pge == pager.CurrentPage ? "active":"")">
-                        <a class="page-link" asp-asp-controller="Home" asp-action="Index" asp-route-pg="@pge">@pge</a>
+                        <a class="page-link" asp-asp-controller="Home" asp-action="Index" asp-route-pageNo="@pge">@pge</a>
                     </li>
                 }
             </ul>

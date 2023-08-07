@@ -39,7 +39,7 @@ namespace project7thSem.Controllers
         public IActionResult Notice(string OurRefNo)
         { 
             var model = new TenderData();
-            var query = connectionClass.Select($"select * from GlobalFreshTenderInfo where OurRefNo ={OurRefNo}");
+            var query = connectionClass.Select($"select * from GlobalFreshTenderInfo where OurRefNo ={OurRefNo}");  
             model.IdData= Helper.ConvertDataTable<tenderDetailModel>(query);
             return View(model);
         }

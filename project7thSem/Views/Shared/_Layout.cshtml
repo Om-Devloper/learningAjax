@@ -13,17 +13,25 @@
     <header class="header fixed-top">
         <div class="row">
             <div class="container">
-                <nav class="topnav p-2">
+                <nav class="p-2">
                     <div class="row">
-                        <div class="col-md-2">
-                            <h3>Tender</h3>
+                        <div class="col-md-2 mt-3">
+                            <a asp-controller="Home" asp-action="Index">
+                                <img src="~/logo.jpg" width="150%"></img>
+                            </a>
+                            
 
                         </div>
+                        <div class="col-md-4"></div>
                         <!-- Links -->
-                        <div class="col-md-8 text-center text-right">
+                        <div class="col-md-6 text-center text-right">
                             <div class="topnav">
-                                <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                                <a asp-area="" asp-controller="Home" asp-action="Privacy">About</a>
+                                @*<a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                <a asp-area="" asp-controller="Home" asp-action="Privacy">About</a>*@
+                                <form class="d-flex">
+                                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                                </form>
                             </div>
                         </div>
                 </nav>

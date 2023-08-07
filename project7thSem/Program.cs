@@ -4,6 +4,7 @@ using ConnectionLibrary.Service;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using project7thSem.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ builder.Configuration.AddJsonFile("appsettings.json",
         optional: true,
         reloadOnChange: true);
 
+
+AppSettings.SMTPConfigModel = builder.Configuration.GetSection("SMTPConfig").Get<SMTPConfigModel>();
 
 AppSettings.ConnectionStrings = builder.Configuration.GetSection("ConnectionStrings").Get<ConnectionStrings>();
 

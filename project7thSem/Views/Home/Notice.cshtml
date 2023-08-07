@@ -3,7 +3,7 @@
 *@
 @model TenderData
 
-<div class="main-content container row">
+<div class="main-content container">
     <h3>@Model.IdData.FirstOrDefault().AgencyName</h3>
     @{
         var workDesc = @Model.IdData.FirstOrDefault().WorkDesc;
@@ -14,7 +14,7 @@
     }
     <h4 style="color:#5e5e5e">@workDesc</h4>
 </div>
-<div class="TbEffect  container row mb-4">
+<div class="TbEffect  container  mb-4">
 
     <div class="row p-2">
         <h3 class="col-md-10 text-primary">
@@ -103,24 +103,10 @@
                         <label for="name">Email Address</label>
                         <input type="email" class="form-control" id="email" placeholder="Enter email">
                     </div>
-                    <div class="form-group row mb-4">
-                        <div class="col-12">
-                            <label for="mm">Date of Birth</label>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" class="form-control" id="mm" placeholder="MM">
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" class="form-control" id="dd" placeholder="DD">
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" class="form-control" id="yyyy" placeholder="YYYY">
-                        </div>
-                    </div>
                     <div class="form-group">
                         <input type="button" value=" Verify Mail" class="btn btn-primary btn-block">
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
 
                     </div>

@@ -9,11 +9,11 @@
         public int StartPage { get; set; }
         public int EndPage { get; set; }
         public Pager() { } 
-        public Pager(int totalItems, int pages, int pageSize=10)
+        public Pager(int totalItems, int page, int pageSize=10)
         {
             {
                 int totalPages = (int)Math.Ceiling((decimal)totalItems / (decimal)pageSize);
-                int currentPage = pages;
+                int currentPage = page;
 
                 int startPage = currentPage - 5;
                 int endPage = currentPage + 4;
