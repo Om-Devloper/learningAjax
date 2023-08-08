@@ -6,5 +6,6 @@ namespace project7thSem.Models
     {
         public List<pageData> TotalData { get; set; }
         public List<tenderDetailModel> IdData { get; set; }
+
     }
 }

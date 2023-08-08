@@ -84,53 +84,157 @@
         <!-- Button trigger modal -->
 
     </div>
-    </div>
+</div>
 
-    <!-- Modal -->
+<!-- Modal -->
 <div class="modal fade show" data-bs-backdrop="static" data-bs-keyboard="false" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content rounded-10">
-                <div class="content-text p-4">
-                    <h3>Registration form</h3>
-                    <form>
-                    <p>All Fields are required
-                        .</p>
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content rounded-10">
+            <div class="content-text p-4">
+                <h3>Registration form</h3>
+                <form id="MailVerify">
+                    <p>
+                        All Fields are required
+                        .
+                    </p>
                     <div class="form-group">
-                        <label for="fname">Full Name</label>
-                        <input type="text" class="form-control" id="fname" placeholder="Full Name">
+                        <label>Full Name</label>
+                        <input type="text" class="form-control" id="txtname" placeholder="Full Name" onblur="ValidateName()">
                     </div>
                     <div class="form-group">
-                        <label for="name">Email Address</label>
-                        <input type="email" class="form-control" id="email" placeholder="Enter email">
+                        <label>Mobile Number</label>
+                        <input type="text" class="form-control" id="txtmobile" placeholder="Enter number" min="9" maxlength="12" onblur="ValidateNumber()">
                     </div>
                     <div class="form-group">
-                        <input type="button" value=" Verify Mail" class="btn btn-primary btn-block">
+                        <label>Email Address</label>
+                        <input type="email" class="form-control" id="txtemail" placeholder="Enter email" onblur="ValidateEmail()">
+                    </div>
+                    <div class="hidden" id="btnVerify">
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input type="text" class="form-control" id="inputOtp" placeholder="Enter OTP">
+                            <button type="button" id="btnSubmit" class="btn btn-primary btn-block">Submit</button>
                         </div>
-
                     </div>
-                    </form>
-                    
+
+
+                    <input type="hidden" id="hdn_email" name="emailhdn">
+                    <input type="hidden" id="hdn_otp" name="otphdn">
+                    <input type="hidden" id="hdn_Tid" name="tidhdn" value="@Model.IdData.FirstOrDefault().OurRefNo">
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
+@section Scripts
+    {
+    <script type="text/javascript">
+
+        $('#btnModal').on('click', function () {
+            $('#modalForm').modal('show');
+            $('#inputOtp').hide();
+            document.getElementById('btnSubmit').innerHTML = "Submit";
+        })
 
 
-    @*    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-modal="true" style="display: block; padding-left: 17px;">
-    </div>
-    *@
+        $("#txtmobile").on("keypress", function (event) {
+            if (event.which < 48 || event.which > 58) {
+                return false;
+            }
+        });
+
+        function ValidateEmail() {
+            var email = document.getElementById("txtemail").value.trim();
+
+            if (email != "") {
+                var expr = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+                if (!expr.test(email)) {
+
+                    toastr.error("Please Enter Valid Email");
+                    document.getElementById("txtemail").value = "";
+                }
+            }
+        }
 
 
+        $("#btnSubmit").click(function (e) {
+            var tValidate = true;
+            if (document.getElementById('btnSubmit').innerHTML.toString() == "Submit") {
+                if (tValidate) {
+                    if ($("#txtname").val() == "") {
+                        toastr.error("Please Enter Name");
+                        tValidate = false;
+                        $("#txtname").focus();
+                    }
+                }
+                if (tValidate) {
+                    if ($("#txtemail").val() == "") {
+                        toastr.error("Please Enter Email Id");
+                        tValidate = false;
+                        $("#txtemail").focus();
+                    }
+                }
+                if (tValidate) {
+                    if ($("#txtmobile").val() == "") {
+                        toastr.error("Please Enter Phone Number");
+                        tValidate = false;
+                        $("#txtmobile").focus();
+                    }
+                }
+                if (tValidate) {
+                    $.ajax({
+                        url: "/Home/sendmailotp",
+                        type: "GET",
+                        data: { name: $('#txtname').val(), mobile: $('#txtmobile').val(), email: $('#txtemail').val() },
+                        success: function (result) {
+                            if (result.id == 1) {
+                                $('#inputOtp').show();
+                                document.getElementById('btnSubmit').innerHTML = "Verify";
+                                $("#hdn_email").val(result.email_new);
+                                $("#hdn_otp").val(result.otp);
+                            }
 
+                        },
+                        error: function (xhr, status, error) {
+                            alert(error);
+                        }
+                    })
+                }
+            }
+            else {
+                alert($('#hdn_otp').val());
+                alert($('#hdn_email').val());
+                alert("hello")
+                if (tValidate) {
+                    if ($("#inputOtp").val() == "") {
+                        toastr.error("Please Enter OTP");
+                        tValidate = false;
+                        $("#inputOtp").focus();
+                    }
+                    if ($("#inputOtp").val() != $("#hdn_otp").val()) {
+                        toastr.error("Please Enter Valid OTP");
+                        tValidate = false;
+                        $("#inputOtp").focus();
+                    }
+                }
+                if (tValidate) {
+                    $.ajax({
+                        url: "/Home/FullNotice",
+                        type: "GET",
 
-    @section Scripts
-        {
-        <script type="text/javascript">
+                        data: { email: $('#hdn_email').val(), OurRefNo: $('#hdn_Tid').val() },
+                        success: function (result) {
+                            window.location.href = "/FullNotice"
+                        },
+                        error: function (xhr, status, error) {
+                            alert(error);
+                        }
+                    })
+                }
+            }
+        });
 
-            $('#btnModal').on('click', function () {
-                alert("hii")
-                $('#modalForm').modal('show')
-            })</script>
+    </script>
     }
