@@ -23,6 +23,7 @@ namespace ConnectionLibrary.Service
             var dt = new DataTable();
             try
             {
+            
                 if (ConnectionState.Closed == _connection.State)
                 {
                     _connection.Open();
@@ -38,6 +39,7 @@ namespace ConnectionLibrary.Service
             }
             catch (Exception ex)
             {
+                _connection.Close();
                 //LogManager.LogManager.ErrorInformation($"Method : Select cause Exception : {ex.Message} and Query is {strQuery}");
                 return null;
             }

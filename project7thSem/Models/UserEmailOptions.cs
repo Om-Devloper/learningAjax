@@ -4,7 +4,10 @@ namespace project7thSem.Models
 {
     public class UserEmailOptions
     {
-        public string Email { get; set; }
-        public int ourrefno { get; set; }
+        public int Id { get; set; }
+        public string name { get; set; }
+        public string email { get; set; }
+        public string contactNo { get; set; }
+        public string inquiredTenderNo { get; set; }
     }
 }

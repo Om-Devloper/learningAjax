@@ -4,8 +4,9 @@ namespace project7thSem.Models
 {
     public class TenderData
     {
-        public List<pageData> TotalData { get; set; }
-        public List<tenderDetailModel> IdData { get; set; }
+        public List<pageData> tenderDetailsInfo { get; set; }
+        public List<tenderDetailModel> shortInfo { get; set; }
+        //public List<UserEmailOptions> UserEmailInfo { get; set; }
 
     }
 }

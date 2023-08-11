@@ -1,5 +1,188 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@model TenderData
 @{
 }
+
+    <input type="hidden" id="clientID" value="@Model.tenderDetailsInfo.FirstOrDefault().emailId" />
+    <div class="main-content container">
+        <div class="row p-2">
+            <h3 class="col-md-10">Tender Detail</h3>
+            <button type="button" class="btn btn-primary col-md-2" data-toggle="modal" data-target="#exampleModal" id="btnMail">
+                Mail This Document
+            </button>
+        </div>
+    </div>
+<div id="bodyhtml">
+    <div class="TbEffect  container  mb-4">
+
+
+        <div class="row p-2">
+            <h3 class="col-md-10 text-primary">
+                Tender Dreif
+            </h3>
+        </div>
+        <div class="row border-top">
+            <span class="col-4 h5 pt-2">
+                Refrence Number
+            </span>
+            <span class="col-8 pt-2">
+                @Model.tenderDetailsInfo.FirstOrDefault().OurRefNo
+            </span>
+        </div>
+        <div class="row border-top">
+            <span class="col-4 h5 pt-2">
+                Tender Number
+            </span>
+            <span class="col-8 pt-2">
+                @Model.tenderDetailsInfo.FirstOrDefault().TenderNo
+            </span>
+        </div>
+        <div class="row border-top">
+            <span class="col-4 h5 pt-2">
+                Tender Brief
+            </span>
+            <span class="col-8 pt-2">
+                @Model.tenderDetailsInfo.FirstOrDefault().WorkDesc
+            </span>
+        </div>
+        <div class="row border-top">
+            <span class="col-4 h5 pt-2">
+                Agency Name
+            </span>
+            <span class="col-8 pt-2">
+                @Model.tenderDetailsInfo.FirstOrDefault().AgencyName
+            </span>
+        </div>
+        <div class="row border-top">
+            <span class="col-4 h5 pt-2">
+                Work Detail
+            </span>
+            <span class="col-8 pt-2">
+                @Model.tenderDetailsInfo.FirstOrDefault().WorkDetail
+            </span>
+        </div>
+        <div class="row border-top">
+            <span class="col-4 h5 pt-2">
+                Tender Amount
+            </span>
+            <span class="col-8 pt-2">
+                @Model.tenderDetailsInfo.FirstOrDefault().TenderAmount
+            </span>
+        </div>
+        <div class="row border-top">
+            <span class="col-4 h5 pt-2">
+                CPV
+            </span>
+            <span class="col-8 pt-2">
+                @Model.tenderDetailsInfo.FirstOrDefault().CPV
+            </span>
+        </div>
+        <div class="row border-top">
+            <span class="col-4 h5 pt-2">
+                Financer Name
+            </span>
+            <span class="col-8 pt-2">
+                @Model.tenderDetailsInfo.FirstOrDefault().FinancerName
+            </span>
+        </div>
+        <div class="row border-top">
+            <span class="col-4 h5 pt-2">
+                Geographical Region
+            </span>
+            <span class="col-8 pt-2">
+                @Model.tenderDetailsInfo.FirstOrDefault().geoRegion
+            </span>
+        </div>
+        <div class="row border-top">
+            <span class="col-4 h5 pt-2">
+                City
+            </span>
+            <span class="col-8 pt-2">
+                @Model.tenderDetailsInfo.FirstOrDefault().city
+            </span>
+        </div>
+        <div class="row border-top">
+            <span class="col-4 h5 pt-2">
+                Submition Date
+            </span>
+            <span class="col-8 pt-2">
+                @Model.tenderDetailsInfo.FirstOrDefault().SubmDate
+            </span>
+        </div>
+        <div class="row border-top">
+            <span class="col-4 h5 pt-2">
+                Country Name
+            </span>
+            <span class="col-8 pt-2">
+                @Model.tenderDetailsInfo.FirstOrDefault().Countryname
+            </span>
+        </div>
+
+    </div>
+    <div class="TbEffect  container  mb-4">
+
+
+        <div class="row p-2">
+            <h3 class="col-md-10 text-primary">
+                Person Detaills
+            </h3>
+        </div>
+        <div class="row border-top">
+            <span class="col-4 h5 pt-2">
+                Name
+            </span>
+            <span class="col-8 pt-2">
+                @Model.tenderDetailsInfo.FirstOrDefault().ContactPerson
+            </span>
+        </div>
+        <div class="row border-top">
+            <span class="col-4 h5 pt-2">
+                Email ID
+            </span>
+            <span class="col-8 pt-2">
+                @Model.tenderDetailsInfo.FirstOrDefault().ContactEmail
+            </span>
+        </div>
+        <div class="row border-top">
+            <span class="col-4 h5 pt-2">
+                Mobile Number
+            </span>
+            <span class="col-8 pt-2">
+                @Model.tenderDetailsInfo.FirstOrDefault().ContactPhone
+            </span>
+        </div>
+        <div class="row border-top">
+            <span class="col-4 h5 pt-2">
+                Address
+            </span>
+            <span class="col-8 pt-2">
+                @Model.tenderDetailsInfo.FirstOrDefault().Address
+            </span>
+        </div>
+    </div>
+</div>
+@section Scripts
+    {
+    <script type="text/javascript">
+        
+        $('#btnMail').on('click', function () {
+            alert($('#clientID').val());
+
+            $.ajax({
+                url: "/home/mailsend",
+                type: "post",
+                data: {
+                    email: $('#clientID').val(), htmlbody: "<html><head></head>"+ $('#bodyhtml').html()+"</html>", subjectline: "requested tender document" },
+                success: function (result) {
+                    toastr.success("mail sent successfully");
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            })
+        })
+
+    </script>
+    }

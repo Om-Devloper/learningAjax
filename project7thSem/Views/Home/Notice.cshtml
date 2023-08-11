@@ -4,9 +4,9 @@
 @model TenderData
 
 <div class="main-content container">
-    <h3>@Model.IdData.FirstOrDefault().AgencyName</h3>
+    <h3>@Model.shortInfo.FirstOrDefault().AgencyName</h3>
     @{
-        var workDesc = @Model.IdData.FirstOrDefault().WorkDesc;
+        var workDesc = @Model.shortInfo.FirstOrDefault().WorkDesc;
         if (workDesc.Length > 50)
         {
             workDesc = workDesc.Substring(0, 50);
@@ -31,7 +31,7 @@
             TDR
         </span>
         <span class="col-8 pt-2">
-            @Model.IdData.FirstOrDefault().OurRefNo
+            @Model.shortInfo.FirstOrDefault().OurRefNo
         </span>
     </div>
     <div class="row border-top">
@@ -39,7 +39,7 @@
             Tender Brief
         </span>
         <span class="col-8 pt-2">
-            @Model.IdData.FirstOrDefault().WorkDesc
+            @Model.shortInfo.FirstOrDefault().WorkDesc
         </span>
     </div>
     <div class="row border-top">
@@ -47,7 +47,7 @@
             Address
         </span>
         <span class="col-8 pt-2">
-            @Model.IdData.FirstOrDefault().Address
+            @Model.shortInfo.FirstOrDefault().Address
         </span>
     </div>
     <div class="row border-top">
@@ -55,7 +55,7 @@
             CPV
         </span>
         <span class="col-8 pt-2">
-            @Model.IdData.FirstOrDefault().Name
+            @Model.shortInfo.FirstOrDefault().Name
         </span>
     </div>
     <div class="row border-top">
@@ -63,7 +63,7 @@
             City
         </span>
         <span class="col-8 pt-2">
-            @Model.IdData.FirstOrDefault().City
+            @Model.shortInfo.FirstOrDefault().City
         </span>
     </div>
     <div class="row border-top">
@@ -71,7 +71,7 @@
             Last Date
         </span>
         <span class="col-8 pt-2">
-            @Model.IdData.FirstOrDefault().SubmDate
+            @Model.shortInfo.FirstOrDefault().SubmDate
         </span>
     </div>
     <div class="row border-top">
@@ -79,7 +79,7 @@
             Competition Type
         </span>
         <span class="col-8 pt-2">
-            @Model.IdData.FirstOrDefault().Name
+            @Model.shortInfo.FirstOrDefault().Name
         </span>
         <!-- Button trigger modal -->
 
@@ -118,8 +118,9 @@
 
 
                     <input type="hidden" id="hdn_email" name="emailhdn">
+                    <input type="hidden" id="hdn_UserID" name="userIdhdn">
                     <input type="hidden" id="hdn_otp" name="otphdn">
-                    <input type="hidden" id="hdn_Tid" name="tidhdn" value="@Model.IdData.FirstOrDefault().OurRefNo">
+                    <input type="hidden" id="hdn_Tid" name="tidhdn" value="@Model.shortInfo.FirstOrDefault().OurRefNo">
                 </form>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -194,6 +195,8 @@
                                 document.getElementById('btnSubmit').innerHTML = "Verify";
                                 $("#hdn_email").val(result.email_new);
                                 $("#hdn_otp").val(result.otp);
+                                $("#hdn_UserID").val(result.userid);
+
                             }
 
                         },
@@ -205,8 +208,7 @@
             }
             else {
                 alert($('#hdn_otp').val());
-                alert($('#hdn_email').val());
-                alert("hello")
+                alert($('#hdn_UserID').val())
                 if (tValidate) {
                     if ($("#inputOtp").val() == "") {
                         toastr.error("Please Enter OTP");
@@ -221,12 +223,14 @@
                 }
                 if (tValidate) {
                     $.ajax({
-                        url: "/Home/FullNotice",
+                        url: "/Home/emailVerify",
                         type: "GET",
 
-                        data: { email: $('#hdn_email').val(), OurRefNo: $('#hdn_Tid').val() },
+                        data: { email: $('#hdn_email').val(), OurRefNo: $('#hdn_Tid').val(), UserID: $('#hdn_UserID').val() },
                         success: function (result) {
-                            window.location.href = "/FullNotice"
+                            if (result.id == 1) {
+                                window.location.href = "/Home/FullNotice/" + result.userid+"?";
+                            }
                         },
                         error: function (xhr, status, error) {
                             alert(error);
