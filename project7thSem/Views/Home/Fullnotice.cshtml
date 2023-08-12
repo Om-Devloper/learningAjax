@@ -5,15 +5,15 @@
 @{
 }
 
-    <input type="hidden" id="clientID" value="@Model.tenderDetailsInfo.FirstOrDefault().emailId" />
-    <div class="main-content container">
-        <div class="row p-2">
-            <h3 class="col-md-10">Tender Detail</h3>
-            <button type="button" class="btn btn-primary col-md-2" data-toggle="modal" data-target="#exampleModal" id="btnMail">
-                Mail This Document
-            </button>
-        </div>
+<input type="hidden" id="clientID" value="@Model.tenderDetailsInfo.FirstOrDefault().emailId" />
+<div class="main-content container">
+    <div class="row p-2">
+        <h3 class="col-md-10">Tender Detail</h3>
+        <button type="button" class="btn btn-primary col-md-2" data-toggle="modal" data-target="#exampleModal" id="btnMail">
+            Mail This Document
+        </button>
     </div>
+</div>
 <div id="bodyhtml">
     <div class="TbEffect  container  mb-4">
 
@@ -119,6 +119,25 @@
                 @Model.tenderDetailsInfo.FirstOrDefault().Countryname
             </span>
         </div>
+        <div class="row border-top">
+            <span class="col-4 h5 pt-2">
+                Political Region Name
+            </span>
+            <span class="col-8 pt-2">
+                @{
+                    if (Model.tenderDetailsInfo.FirstOrDefault().poliRegionName != null)
+                    {
+                        var regions = Model.tenderDetailsInfo.FirstOrDefault().poliRegionName.Split(",");
+                        <ol>
+                            @foreach (var item in regions)
+                            {
+                                <li>@item</li>
+                            }
+                        </ol>
+                    }
+                }
+            </span>
+        </div>
 
     </div>
     <div class="TbEffect  container  mb-4">
@@ -166,7 +185,7 @@
 @section Scripts
     {
     <script type="text/javascript">
-        
+
         $('#btnMail').on('click', function () {
             alert($('#clientID').val());
 
@@ -174,7 +193,8 @@
                 url: "/home/mailsend",
                 type: "post",
                 data: {
-                    email: $('#clientID').val(), htmlbody: "<html><head></head>"+ $('#bodyhtml').html()+"</html>", subjectline: "requested tender document" },
+                    email: $('#clientID').val(), htmlbody: "<html><head></head>" + $('#bodyhtml').html() + "</html>", subjectline: "requested tender document"
+                },
                 success: function (result) {
                     toastr.success("mail sent successfully");
                 },

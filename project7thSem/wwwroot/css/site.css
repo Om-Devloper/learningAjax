@@ -65,8 +65,40 @@ a.header {
 .main-content {
     margin-top: 150px
 }
-.TbEffect{
-    background-color:white;
-    padding:15px;
+
+.TbEffect {
+    background-color: white;
+    padding: 15px;
+}
+/*calender(days remaining)*/
+.calendar {
+    width: 80px;
+    height: 90px;
+    border: 1px solid #D5D5D5;
+    text-align: center;
+    box-shadow: 0px 10px 25px #ABABAB;
 }
 
+.backgroundcalendar {
+    background: #f00;
+    color: white;
+}
+
+.monthcalendar {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.daycalendar {
+    color: red;
+    font-size: 15px;
+    padding-top: 2px;
+}
+
+.datecalendar {
+    color: red;
+    font-size: 24px;
+    font-weight: bold;
+    padding-bottom: 10px;
+}

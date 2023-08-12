@@ -22,6 +22,7 @@
         public int SectorID { get; set; }
         public string ContactPerson { get; set; }
         public string ContactPhone { get; set; }
+        public string poliRegionName  { get; set; }
 
 
     }
