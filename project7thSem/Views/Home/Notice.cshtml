@@ -129,6 +129,28 @@
         </div>
     </div>
 </div>
+
+<!-- Modal - 2 (free user block) -->
+<div class="modal fade" id="unsucriberUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Upgrade for Full Tender Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                You've hit the maximum limit for free access to tender details. To see more information, you'll need to subscribe or become a paid member.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Subscribe Now</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts
     {
     <script type="text/javascript">
@@ -198,6 +220,9 @@
                                 $("#hdn_UserID").val(result.userid);
 
                             }
+                            else if (result.id == 2) {
+                                $('#unsucriberUser').modal('show');
+                            }
 
                         },
                         error: function (xhr, status, error) {
@@ -229,7 +254,7 @@
                         data: { email: $('#hdn_email').val(), OurRefNo: $('#hdn_Tid').val(), UserID: $('#hdn_UserID').val() },
                         success: function (result) {
                             if (result.id == 1) {
-                                window.location.href = "/Home/FullNotice/" + result.userid+"?";
+                                window.location.href = "/Home/FullNotice/" + result.userid + "?";
                             }
                         },
                         error: function (xhr, status, error) {
