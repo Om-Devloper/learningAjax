@@ -8,6 +8,9 @@ using System.Diagnostics;
 using System.Net.Mail;
 using System.Net;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Azure;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace project7thSem.Controllers
 {
@@ -22,8 +25,12 @@ namespace project7thSem.Controllers
         public IActionResult Index(int pageNo = 1)
         {
             var model = new TenderData();
-            var query = connectionClass.Select("SELECT top 100 OurRefNo,TenderAmount,SubmDate,WorkDesc,AgencyName,(SELECT Name fROM Country_Mast cm WHERE cm.CountryID=gi.CountryId) as Countryname FROM GlobalFreshTenderInfo gi");
+
+            var query = connectionClass.Select("SELECT top 1000 OurRefNo,TenderAmount,SubmDate,WorkDesc,AgencyName,(SELECT Name fROM Country_Mast cm WHERE cm.CountryID=gi.CountryId) as Countryname FROM GlobalFreshTenderInfo gi");
+
+
             model.tenderDetailsInfo = Helper.ConvertDataTable<pageData>(query);
+
             int TenderCount = model.tenderDetailsInfo.Count();
             const int pageSize = 10;
             if (pageNo < 1)
@@ -35,6 +42,28 @@ namespace project7thSem.Controllers
             model.tenderDetailsInfo = model.tenderDetailsInfo.Skip(recSkip).Take(pager.PageSize).ToList();
 
             this.ViewBag.Pager = pager;
+            return View(model);
+        }
+        [Route("search/{searchtxt?}")]
+        public IActionResult search(string searchtxt, int pageNo = 1)
+        {
+            var model = new TenderData();
+            var query = connectionClass.Select($"SELECT OurRefNo,TenderAmount,SubmDate,WorkDesc,AgencyName,\r\n(SELECT Name fROM Country_Mast cm WHERE cm.CountryID=gi.CountryId) \r\nas Countryname FROM GlobalFreshTenderInfo gi  where FREETEXT(SearchText,'\"{searchtxt}\"') ORDER BY TenderAmount DESC");
+            model.tenderDetailsInfo = Helper.ConvertDataTable<pageData>(query);
+
+
+            int TenderCount = model.tenderDetailsInfo.Count();
+            const int pageSize = 10;
+            if (pageNo < 1)
+                pageNo = 1;
+
+            int recsCount = model.tenderDetailsInfo.Count();
+            var pager = new Pager(recsCount, pageNo, pageSize);
+            int recSkip = (pageNo - 1) * pageSize;
+            model.tenderDetailsInfo = model.tenderDetailsInfo.Skip(recSkip).Take(pager.PageSize).ToList();
+
+            this.ViewBag.Pager = pager;
+
             return View(model);
         }
 
@@ -52,7 +81,7 @@ namespace project7thSem.Controllers
             var htmlbody = $"<style type=\'text/css\'>#outlook a {{ padding:0; }}\r\n          body {{ margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%; }}\r\n          table, td {{ border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt; }}\r\n          img {{ border:0;height:auto;line-height:100%; outline:none;text-decoration:none;-ms-interpolation-mode:bicubic; }}\r\n          p {{ display:block;margin:13px 0; }}</style><!--[if mso]>\r\n        <noscript>\r\n        <xml>\r\n        <o:OfficeDocumentSettings>\r\n          <o:AllowPNG/>\r\n          <o:PixelsPerInch>96</o:PixelsPerInch>\r\n        </o:OfficeDocumentSettings>\r\n        </xml>\r\n        </noscript>\r\n        <![endif]--><!--[if lte mso 11]>\r\n        <style type=\'text/css\'>\r\n          .mj-outlook-group-fix {{ width:100% !important; }}\r\n        </style>\r\n        <![endif]--><!--[if !mso]><!--><link href=\'https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,700\' rel=\'stylesheet\' type=\'text/css\'><style type=\'text/css\'>@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,700);</style><!--<![endif]--><style type=\'text/css\'>@media only screen and (min-width:480px) {{\r\n        .mj-column-per-100 {{ width:100% !important; max-width: 100%; }}\r\n      }}</style><style media=\'screen and (min-width:480px)\'>.moz-text-html .mj-column-per-100 {{ width:100% !important; max-width: 100%; }}</style><style type=\'text/css\'>@media only screen and (max-width:480px) {{\r\n      table.mj-full-width-mobile {{ width: 100% !important; }}\r\n      td.mj-full-width-mobile {{ width: auto !important; }}\r\n    }}</style></head><body style=\'word-spacing:normal;background-color:#fafbfc;\'><div style=\'background-color:#fafbfc;\'><!--[if mso | IE]><table align=\'center\' border=\'0\' cellpadding=\'0\' cellspacing=\'0\' class=\'\' style=\'width:600px;\' width=\'600\' ><tr><td style=\'line-height:0px;font-size:0px;mso-line-height-rule:exactly;\'><![endif]--><div style=\'margin:0px auto;max-width:600px;\'><table align=\'center\' border=\'0\' cellpadding=\'0\' cellspacing=\'0\' role=\'presentation\' style=\'width:100%;\'><tbody><tr><td style=\'direction:ltr;font-size:0px;padding:20px 0;padding-bottom:20px;padding-top:20px;text-align:center;\'><!--[if mso | IE]><table role=\'presentation\' border=\'0\' cellpadding=\'0\' cellspacing=\'0\'><tr><td class=\'\' style=\'vertical-align:middle;width:600px;\' ><![endif]--><div class=\'mj-column-per-100 mj-outlook-group-fix\' style=\'font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;\'><table border=\'0\' cellpadding=\'0\' cellspacing=\'0\' role=\'presentation\' style=\'vertical-align:middle;\' width=\'100%\'><tbody><tr><td align=\'center\' style=\'font-size:0px;padding:25px;word-break:break-word;\'><table border=\'0\' cellpadding=\'0\' cellspacing=\'0\' role=\'presentation\' style=\'border-collapse:collapse;border-spacing:0px;\'><tbody><tr><td style=\'width:550px;\'><img height=\'auto\' src=\'https://www.tenderdetail.com/Content/img/TenderDetail.png\' style=\'border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;\' width=\'550\'></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><table align=\'center\' border=\'0\' cellpadding=\'0\' cellspacing=\'0\' class=\'\' style=\'width:600px;\' width=\'600\' bgcolor=\'#ffffff\' ><tr><td style=\'line-height:0px;font-size:0px;mso-line-height-rule:exactly;\'><![endif]--><div style=\'background:#ffffff;background-color:#ffffff;margin:0px auto;max-width:600px;\'><table align=\'center\' border=\'0\' cellpadding=\'0\' cellspacing=\'0\' role=\'presentation\' style=\'background:#ffffff;background-color:#ffffff;width:100%;\'><tbody><tr><td style=\'direction:ltr;font-size:0px;padding:20px 0;padding-bottom:20px;padding-top:20px;text-align:center;\'><!--[if mso | IE]><table role=\'presentation\' border=\'0\' cellpadding=\'0\' cellspacing=\'0\'><tr><td class=\'\' style=\'vertical-align:middle;width:600px;\' ><![endif]--><div class=\'mj-column-per-100 mj-outlook-group-fix\' style=\'font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;\'><table border=\'0\' cellpadding=\'0\' cellspacing=\'0\' role=\'presentation\' style=\'vertical-align:middle;\' width=\'100%\'><tbody><tr><td align=\'center\' style=\'font-size:0px;padding:10px 25px;padding-right:25px;padding-left:25px;word-break:break-word;\'><div style=\'font-family:open Sans Helvetica, Arial, sans-serif;font-size:16px;line-height:1;text-align:center;color:#000000;\'><span>Hello,</span></div></td></tr><tr><td align=\'center\' style=\'font-size:0px;padding:10px 25px;padding-right:25px;padding-left:25px;word-break:break-word;\'><div style=\'font-family:open Sans Helvetica, Arial, sans-serif;font-size:16px;line-height:1;text-align:center;color:#000000;\'>Please use the verification code below on the <b>Tender Detail</b> website:</div></td></tr><tr><td align=\'center\' style=\'font-size:0px;padding:10px 25px;word-break:break-word;\'><div style=\'font-family:open Sans Helvetica, Arial, sans-serif;font-size:24px;font-weight:bold;line-height:1;text-align:center;color:#000000;\'>{_Otp}</div></td></tr><tr><td align=\'center\' style=\'font-size:0px;padding:10px 25px;padding-right:16px;padding-left:25px;word-break:break-word;\'><div style=\'font-family:open Sans Helvetica, Arial, sans-serif;font-size:16px;line-height:1;text-align:center;color:#000000;\'>If you didn't request this, you can ignore this email or let us know.</div></td></tr><tr><td align=\'center\' style=\'font-size:0px;padding:10px 25px;padding-right:25px;padding-left:25px;word-break:break-word;\'><div style=\'font-family:open Sans Helvetica, Arial, sans-serif;font-size:16px;line-height:1;text-align:center;color:#000000;\'>Thanks!<br><b>Tender Detail Team</b></div></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div></body></html>";
             var subjectline = "testing";
             var query = (int)connectionClass.Select($"select Id from userDetailsInfo  where emailId = '{email}' ").Rows.Count;
-             if (query==0)
+            if (query == 0)
             {
 
                 bool mailSending = mailsend(email, htmlbody, subjectline);
@@ -63,7 +92,7 @@ namespace project7thSem.Controllers
                     try
                     {
 
-                        queryID = connectionClass.Select($"Insert into userDetailsInfo ( [name],[emailId],[contactNo]) values ('{name}','{email}','{mobile}');select SCOPE_IDENTITY() as Id").Rows[0].ItemArray.FirstOrDefault().ToString(); 
+                        queryID = connectionClass.Select($"Insert into userDetailsInfo ( [name],[emailId],[contactNo]) values ('{name}','{email}','{mobile}');select SCOPE_IDENTITY() as Id").Rows[0].ItemArray.FirstOrDefault().ToString();
                         // model.Id =Convert.ToInt32( Helper.ConvertDataTable<UserEmailOptions>(query).FirstOrDefault().Id);
                     }
                     catch (Exception)
@@ -82,7 +111,7 @@ namespace project7thSem.Controllers
         [HttpPost]
         public bool mailsend(string email, string htmlbody, string subjectline)
         {
-          
+
             var tstaus = true;
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("root42155@gmail.com");
@@ -109,8 +138,8 @@ namespace project7thSem.Controllers
             }
             return tstaus;
         }
-        
-        public IActionResult emailVerify(string email , string OurRefNo, string UserID)
+
+        public IActionResult emailVerify(string email, string OurRefNo, string UserID)
         {
             try
             {
@@ -125,14 +154,14 @@ namespace project7thSem.Controllers
             }
 
         }
-        
+
         [Route("Home/FullNotice/{userClientid}")]
         public IActionResult FullNotice(string userClientid)
         {
             var query = connectionClass.Select($"SELECT (SELECT (SELECT name fROM Country_Mast cm WHERE cm.CountryID=gi.CountryId) )as Countryname,\r\n*\r\n,(SELECT (SELECT name fROM GeographyRegion_Mast gm WHERE gm.ID=gi.GeoRegID))as geoRegion\r\nFROM GlobalFreshTenderInfo gi right JOIN userDetailsInfo udi ON gi.OurRefNo= udi.inquiredTenderNo  Where id = '{userClientid}'");
             var model = new TenderData();
             model.tenderDetailsInfo = Helper.ConvertDataTable<pageData>(query);
-            if(model.tenderDetailsInfo.FirstOrDefault().PoliRegID != null)
+            if (model.tenderDetailsInfo.FirstOrDefault().PoliRegID != null)
             {
                 var poliregion = model.tenderDetailsInfo.FirstOrDefault().PoliRegID.Split(",");
                 var totalPolireg = "";
@@ -152,8 +181,8 @@ namespace project7thSem.Controllers
                 model.tenderDetailsInfo.FirstOrDefault().poliRegionName = totalPolireg;
                 return View(model);
             }
-            
-            
+
+
 
             return View(model);
         }

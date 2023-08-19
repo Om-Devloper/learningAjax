@@ -30,9 +30,24 @@ namespace ConnectionLibrary.Service
                 }
                 using (SqlCommand cmd = new SqlCommand(strQuery, _connection))
                 {
-                    var adapter = new SqlDataAdapter(cmd);
-                    cmd.CommandTimeout = 999999;
-                    adapter.Fill(dt);
+                    if (_connection.State == ConnectionState.Open)
+                    {
+                        var adapter = new SqlDataAdapter(cmd);
+                        cmd.CommandTimeout = 999999;
+                        if (dt!=null)
+                        {
+                            adapter.Fill(dt);
+                        }
+                        
+                        
+                    }
+                    else
+                    {
+                        _connection.Open();
+                        var adapter = new SqlDataAdapter(cmd);
+                        cmd.CommandTimeout = 999999;
+                        adapter.Fill(dt);
+                    }
                     
                 }
                 return dt;

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/toastr.min.css" />
-    
+
     <link rel="stylesheet" href="~/project7thSem.styles.css" asp-append-version="true" />
 </head>
 <body class="body">
@@ -21,7 +21,7 @@
                             <a asp-controller="Home" asp-action="Index">
                                 <img src="~/logo.jpg" width="150%"></img>
                             </a>
-                            
+
 
                         </div>
                         <div class="col-md-4"></div>
@@ -31,8 +31,8 @@
                                 @*<a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                                 <a asp-area="" asp-controller="Home" asp-action="Privacy">About</a>*@
                                 <form class="d-flex">
-                                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                                    <input class="form-control me-2" id="searchid" type="search" placeholder="Search" aria-label="Search">
+                                    <button class="btn btn-outline-primary" id="searchbtn" type="submit">Search</button>
                                 </form>
                             </div>
                         </div>
@@ -40,6 +40,7 @@
             </div>
         </div>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -51,8 +52,9 @@
         </div>
     </footer>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/js/toastr.min.js" ></script>
+    <script src="~/js/toastr.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

@@ -1,0 +1,182 @@
+﻿@model TenderData;
+@{
+    Pager pager = new Pager();
+    int pageNo = 0;
+    int i = 0;
+    int j = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+        i = (pageNo * 10) - 9;
+        j = pageNo * 10;
+    }
+}
+
+    <div class="main-content container row" id="mainDiv">
+        @foreach (pageData item in Model.tenderDetailsInfo)
+        {
+            <div style="background-color:white" class="col-md-12 p-2 m-2 row">
+                <div class="col-md-1">
+                    <span>@i</span>
+                </div>
+                <div class="col-md-11">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <a style="color:#0070b8 " class="h5 p-2" href="@Url.Action("Notice","Home",new{OurRefNo = item.OurRefNo})">@item.AgencyName</a>
+                        </div>
+                        <div class="col-md-1">
+                        </div>
+                    </div>
+                    <h5 class="p-2">
+                        @{
+                            if (item.WorkDesc.Length > 100)
+                            {
+                                item.WorkDesc = item.WorkDesc.Substring(0, 100);
+                            }
+                        }
+
+                        <span style="color:orangered;">@item.OurRefNo </span>
+                        <span>@item.WorkDesc</span>
+
+                    </h5>
+                    <div class="row p-2">
+                        <div class="col-md-4">
+                            <span style="color:#0070b8"> Due Date : </span>@item.SubmDate.ToString("dd-MM-yyyy")
+                            <p class="mt-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 3c2.131 0 4 1.73 4 3.702 0 2.05-1.714 4.941-4 8.561-2.286-3.62-4-6.511-4-8.561 0-1.972 1.869-3.702 4-3.702zm0-2c-3.148 0-6 2.553-6 5.702 0 3.148 2.602 6.907 6 12.298 3.398-5.391 6-9.15 6-12.298 0-3.149-2.851-5.702-6-5.702zm0 8c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2 2-.895 2-2 2zm12 14h-24l4-8h3.135c.385.641.798 1.309 1.232 2h-3.131l-2 4h17.527l-2-4h-3.131c.435-.691.848-1.359 1.232-2h3.136l4 8z" /></svg><span class="pl-2">@item.Countryname</span></p>
+                        </div>
+                        @{
+                            var TenderAmount = "";
+                            var TenderAmountCheck = Convert.ToInt64(item.TenderAmount);
+                            if (TenderAmountCheck == 0)
+                            {
+                                TenderAmount = "Reffer To Document";
+                            }
+                            else
+                            {
+                                TenderAmount = "₹" + item.TenderAmount;
+                            }
+                        }
+                        <div class="col-md-5">
+                            <span style="color:#0070b8"> Tender Value : </span>@TenderAmount
+                            <form class="p-2 mt-2">
+                                <a class="btn btn-primary" href="@Url.Action("Notice","Home",new{OurRefNo = item.OurRefNo})">View Notice</a>
+
+                            </form>
+                        </div>
+                        <div class="col-md-3">
+                            @{
+                                var DaysLeft = "";
+                                var currDate = (Convert.ToDateTime(item.SubmDate) - DateTime.Now).Days;
+                                if (currDate <= 0)
+                                {
+                                    DaysLeft = "Reffer To Document";
+                                    <span class="text-danger">
+                                        @DaysLeft
+                                    </span>
+                                }
+                                else
+                                {
+                                    DaysLeft = "Days Left : " + currDate.ToString().Split(".").FirstOrDefault();
+
+                                    <div class="calendar">
+                                        <div class="monthcalendar backgroundcalendar">Left</div>
+                                        <div class="daycalendar">DAYS</div>
+                                        <div class="datecalendar p-0">8</div>
+
+                                    </div>
+
+
+                                }
+                            }
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            i++;
+        }
+        <div class="container">
+            @if (pager.TotalPages > 0)
+            {
+                <ul class="pagination justify-content-end">
+
+                    @if (pager.CurrentPage > 1)
+                    {
+                        <li class="page-item">
+                        <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-pageNo="1">First</a>
+                        </li>
+                        <li>
+                        <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-pageNo="@(pager.CurrentPage - 1)">Previous</a>
+                        </li>
+                    }
+
+                    @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                    {
+                        <li class="page-item @(pge == pager.CurrentPage ? "active":"")">
+                        <a class="page-link" asp-asp-controller="Home" asp-action="Index" asp-route-pageNo="@pge">@pge</a>
+                        </li>
+                    }
+
+                    @if (pager.CurrentPage < pager.TotalPages)
+                    {
+                        <li class="page-item">
+                        <a class="page-link" asp-controller="Home" asp-action="search" asp-route-pageNo="@(pager.CurrentPage + 1)">Next</a>
+                        </li>
+                        <li>
+                        <a class="page-link" asp-controller="Home" asp-action="search" asp-route-pageNo="@(pager.TotalPages)">Last</a>
+                        </li>
+                    }
+                </ul>
+            }
+
+        </div>
+    </div>
+
+
+
+@*@section Scripts
+    {
+    <script type="text/javascript">
+
+        //function GetNotice(OurRefNo){   onclick="//GetNotice(item.OurRefNo)"
+        //    $.ajax({
+        //        url: "/Home/Notice",
+        //        type: "GET",
+        //        data: { OurRefNo },
+        //        success: function (result) {
+        //            alert("good")
+        //            window.location.href = "/Home/Notice";
+        //        },
+        //        error: function (xhr, status, error) {
+        //            alert(error);
+        //        }
+        //    })
+        //}
+
+
+        $("#btnlink").on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "/Home",
+                type: "GET",
+                data: { OurRefNo: $(this).attr("value") },
+                success: function (result) {
+                    window.location.href = "/Home/Notice";
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            })
+        });
+
+    </script>
+
+    }*@
+
+
+

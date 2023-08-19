@@ -1,4 +1,4 @@
-﻿@model TenderData;
+﻿@model TenderData
 @{
     ViewData["Title"] = "Home Page";
 
@@ -13,7 +13,7 @@
         i = (pageNo * 10) - 9;
     }
 }
-<div class="main-content container row" id="mainDiv">
+<div class="main-content container row">
     @foreach (pageData item in Model.tenderDetailsInfo)
     {
         <div style="background-color:white" class="col-md-12 p-2 m-2 row">
@@ -100,42 +100,18 @@
 
         i++;
     }
-        <div class="container">
-            @if (pager.TotalPages > 0)
-            {
-                <ul class="pagination justify-content-end">
+    <div class="row">
+        @if (pager.TotalPages > 0)
+        {
+            <ul class="pagination justify-content-end">
 
-                    @if (pager.CurrentPage > 1)
-                    {
-                        <li class="page-item">
-                        <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-pageNo="1">First</a>
-                        </li>
-                        <li>
-                        <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-pageNo="@(pager.CurrentPage - 1)">Previous</a>
-                        </li>
-                    }
-
-                    @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
-                    {
-                        <li class="page-item @(pge == pager.CurrentPage ? "active":"")">
+                @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                {
+                    <li class="page-item @(pge == pager.CurrentPage ? "active":"")">
                         <a class="page-link" asp-asp-controller="Home" asp-action="Index" asp-route-pageNo="@pge">@pge</a>
-                        </li>
-                    }
-
-                    @if (pager.CurrentPage < pager.TotalPages)
-                    {
-                        <li class="page-item">
-                            <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-pageNo="@(pager.CurrentPage + 1)">Next</a>
-                        </li>
-                        <li>
-                        <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-pageNo="@(pager.TotalPages)">Last</a>
-                        </li>
-                    }
-                </ul>
-            }
-
-        </div>
+                    </li>
+                }
+            </ul>
+        }
     </div>
-
-
-
+</div>
